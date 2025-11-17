@@ -1,12 +1,12 @@
 # Queuelens
 QueueLens is a crowd-sourced web app that lets users report and view real-time queue wait times on an interactive map. Reports automatically age out after an hour and are weighted by freshness, so you always see the most relevant wait estimates.
 
-# ✨Features
+# Features
 - Search your destination!
 - Report live wait times!
 - Reports auto-expire after 60 minutes!
 
-# ⚡Quick Start
+# Quick Start
 <details>
 <summary>setup</summary>
 
@@ -34,7 +34,7 @@ npm run dev
 ```
 </details>
 
-# 💻Example Usage
+# Example Usage
 1. Search for a location (e.g. "Toronto")
 2. View markers showing current reported wait times
 3. Enter a wait time and submit to help others
