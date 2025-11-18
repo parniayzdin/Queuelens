@@ -39,7 +39,7 @@ npm run dev
 2. View markers showing current reported wait times
 3. Enter a wait time and submit to help others
 4. Reports fade out after 1 hour to keep the data fresh
-<div align="center"> Made with ❤️ by Parnia Yazdinia </div>
+<div align="center"> Made by Parnia Yazdinia </div>
 
 
 
