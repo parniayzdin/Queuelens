@@ -7,7 +7,7 @@ QueueLens is a crowd-sourced web app that lets users report and view real-time q
 - Reports auto-expire after 60 minutes!
 
 # Overview
-<img width="1709" height="893" alt="Screenshot 2025-09-13 175551" src="https://github.com/user-attachments/assets/39785805-1553-4890-a4e0-b0879c1c3894" />
+<img width="1553" height="782" alt="Screenshot 2025-07-21 192425" src="https://github.com/user-attachments/assets/d80f43c5-bf92-467c-97c4-b58eef14ce5c" />
 
 # Quick Start
 <details>
