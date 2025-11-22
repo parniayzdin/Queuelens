@@ -6,6 +6,9 @@ QueueLens is a crowd-sourced web app that lets users report and view real-time q
 - Report live wait times!
 - Reports auto-expire after 60 minutes!
 
+# Overview
+<img width="1709" height="893" alt="Screenshot 2025-09-13 175551" src="https://github.com/user-attachments/assets/39785805-1553-4890-a4e0-b0879c1c3894" />
+
 # Quick Start
 <details>
 <summary>setup</summary>
