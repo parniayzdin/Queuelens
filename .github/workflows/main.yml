@@ -1,113 +1,28 @@
-name: CI - QueueLens
+name: QueueLens CI
 
 on:
   push:
-    branches: ["main"]
+    branches: [ main ]
   pull_request:
-    branches: ["main"]
+    branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        if: ${{ hashFiles('**/package.json') != '' }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install frontend dependencies
-        if: ${{ hashFiles('**/package.json') != '' }}
-        run: |
-          # Prefer npm ci when lockfile exists, otherwise fallback to npm install
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
-
-      - name: Build frontend
-        if: ${{ hashFiles('**/package.json') != '' }}
-        run: npm run build --if-present
-
-      - name: Upload frontend build (dist)
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: queuelens-frontend-dist
-          path: dist
-          if-no-files-found: ignore
-
   test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        if: ${{ hashFiles('**/package.json') != '' }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install frontend dependencies
-        if: ${{ hashFiles('**/package.json') != '' }}
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
-
-      - name: Run frontend checks (optional)
-        if: ${{ hashFiles('**/package.json') != '' }}
-        run: |
-          npm run lint --if-present
-          npm test --if-present -- --ci || npm test --if-present
-        shell: bash
-
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install backend dependencies (best effort)
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install pytest pytest-asyncio httpx
 
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          elif [ -f pyproject.toml ]; then
-            pip install .
-          else
-            pip install pytest fastapi uvicorn
-          fi
-        shell: bash
-
-      - name: Backend sanity check + tests
-        run: |
-          set -e
-          : > test_results.txt
-
-          if [ -f main.py ]; then
-            python -m py_compile main.py
-            echo "Python syntax check: OK" >> test_results.txt
-          else
-            echo "main.py not found at repo root (skipping py_compile)" >> test_results.txt
-          fi
-
-          if [ -d tests ] || ls -1 test_*.py 2>/dev/null | grep -q .; then
-            pytest -q | tee -a test_results.txt
-          else
-            echo "No tests found; skipping pytest." >> test_results.txt
-          fi
-        shell: bash
-
-      - name: Upload test results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: queuelens-test-results
-          path: test_results.txt
-          if-no-files-found: ignore
+      - name: Run tests
+        run: pytest -q
+        working-directory: backend
