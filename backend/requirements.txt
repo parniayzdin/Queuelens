@@ -1,6 +1,8 @@
 fastapi
 uvicorn
 python-dotenv
+geopy
+sqlalchemy
+sqlmodel
 pytest
 httpx
-geopy
