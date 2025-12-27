@@ -19,6 +19,10 @@ engine = create_engine(DATABASE_URL, echo=True) #created a database connection e
 
 app = FastAPI()
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://localhost:5174"],
