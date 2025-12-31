@@ -51,13 +51,30 @@ def create_report(report: Report):
         session.commit()
         session.refresh(report)
         return report
-@app.get("/reports/") #retrieve data, and to keep track of valid reports
-def read_reports():
-    now=datetime.utcnow() #this gets the current time
-    with Session(engine) as session:
-        statment = select(Report)
-        results = session.exec(statment).all() #gets all reports from the atabse
     
+def expire_old_reports():
+    now = datetime.utcnow()
+    with Session(engine) as session:
+        old_reports = session.exec(
+            select(Report).where(
+                Report.created_at + timedelta(minutes=Report.ttl_minutes) <= now
+            )
+        ).all()
+
+        for r in old_reports:
+            session.delete(r)
+
+        session.commit()
+
+
+@app.get("/reports/")
+def read_reports():
+    expire_old_reports()  
+
+    now = datetime.utcnow()
+    with Session(engine) as session:
+        results = session.exec(select(Report)).all()
+
         valid_reports = []
         for report in results:
             expiry = report.created_at + timedelta(minutes=report.ttl_minutes)
